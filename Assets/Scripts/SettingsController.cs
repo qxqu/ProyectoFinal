@@ -4,6 +4,7 @@ public class SettingsController : MonoBehaviour
 {
     [SerializeField] private GameObject settingsPanel; // Panel de Configuración
     [SerializeField] private GameObject skinsPanel;    // Panel de Skins
+    [SerializeField] private GameObject ayudaPanel;    // Panel de Ayuda
 
     private bool isOpen = false;
 
@@ -24,9 +25,17 @@ public class SettingsController : MonoBehaviour
                 Debug.LogWarning("⚠️ PanelSkins no está asignado en el Inspector ni encontrado en la escena.");
         }
 
-        // Ambos empiezan ocultos
+        if (ayudaPanel == null)
+        {
+            ayudaPanel = GameObject.Find("AyudaPanel");
+            if (ayudaPanel == null)
+                Debug.LogWarning("⚠️ AyudaPanel no está asignado en el Inspector ni encontrado en la escena.");
+        }
+
+        // Todos empiezan ocultos
         if (settingsPanel != null) settingsPanel.SetActive(false);
         if (skinsPanel != null) skinsPanel.SetActive(false);
+        if (ayudaPanel != null) ayudaPanel.SetActive(false);
     }
 
     // 🔹 Abre el panel principal de Settings
@@ -36,6 +45,8 @@ public class SettingsController : MonoBehaviour
 
         settingsPanel.SetActive(true);
         if (skinsPanel != null) skinsPanel.SetActive(false);
+        if (ayudaPanel != null) ayudaPanel.SetActive(false);
+
         Time.timeScale = 0f; // pausa el juego
         isOpen = true;
     }
@@ -66,6 +77,7 @@ public class SettingsController : MonoBehaviour
 
         settingsPanel.SetActive(false);
         skinsPanel.SetActive(true);
+        if (ayudaPanel != null) ayudaPanel.SetActive(false);
     }
 
     // 🔹 Vuelve del panel Skins al panel Settings
@@ -74,6 +86,25 @@ public class SettingsController : MonoBehaviour
         if (skinsPanel == null) return;
 
         skinsPanel.SetActive(false);
+        settingsPanel.SetActive(true);
+    }
+
+    // 🔹 Abre el panel de Ayuda desde Settings
+    public void OpenAyuda()
+    {
+        if (ayudaPanel == null) return;
+
+        settingsPanel.SetActive(false);
+        ayudaPanel.SetActive(true);
+        if (skinsPanel != null) skinsPanel.SetActive(false);
+    }
+
+    // 🔹 Cierra Ayuda y vuelve al panel de Settings
+    public void CloseAyuda()
+    {
+        if (ayudaPanel == null) return;
+
+        ayudaPanel.SetActive(false);
         settingsPanel.SetActive(true);
     }
 }

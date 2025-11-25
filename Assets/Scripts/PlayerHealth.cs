@@ -6,12 +6,11 @@ public class PlayerHealth : MonoBehaviour
     public int maxLives = 3;
     private int currentLives;
 
-    public Image[] heartImages;   // Arrastras los corazones desde el Canvas
+    public Image[] heartImages;
     public Sprite fullHeart;
     public Sprite emptyHeart;
 
-    private HeartNode head;       // Inicio de la lista enlazada
-
+    private HeartNode head;
     private bool isInvincible = false;
     public float invincibleTime = 1f;
 
@@ -22,7 +21,7 @@ public class PlayerHealth : MonoBehaviour
         UpdateHearts();
     }
 
-    // Construye la lista enlazada usando el array del inspector
+    // Construye la lista enlazada
     void BuildLinkedList()
     {
         HeartNode prev = null;
@@ -40,12 +39,19 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
+    // 👉 MÉTODO ORIGINAL (sin parámetros)
     public void TakeDamage()
+    {
+        TakeDamage(1); // Llama al nuevo método
+    }
+
+    // 👉 MÉTODO NUEVO (con parámetros)
+    public void TakeDamage(int amount)
     {
         if (isInvincible)
             return;
 
-        currentLives--;
+        currentLives -= amount;
 
         if (currentLives <= 0)
         {
@@ -82,7 +88,7 @@ public class PlayerHealth : MonoBehaviour
     }
 }
 
-// Nodo de lista enlazada
+// Nodo
 public class HeartNode
 {
     public Image heartImage;

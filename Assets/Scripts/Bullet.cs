@@ -15,14 +15,21 @@ public class Bullet : MonoBehaviour
         transform.Translate(Vector2.right * speed * Time.deltaTime);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("Bala golpeó: " + collision.collider.name);
+        Debug.Log("Bala golpeó: " + collision.name);
 
-        if (collision.collider.CompareTag("Enemy"))
+        if (collision.CompareTag("Enemy"))
         {
-            Destroy(collision.collider.gameObject); // Mata enemigo
-            Destroy(gameObject); // Destruye bala
+            Destroy(collision.gameObject); // Destruye enemigo
+
+            // Notificar al RoundManager
+            if (RoundManager.Instance != null)
+            {
+                RoundManager.Instance.OnEnemyKilled();
+            }
         }
+
+        Destroy(gameObject); // Destruye bala siempre
     }
 }

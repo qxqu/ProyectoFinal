@@ -3,14 +3,15 @@ using UnityEngine.SceneManagement;
 
 public class PausaJuego : MonoBehaviour
 {
+    public static bool GamePaused = false;
+
     public GameObject panelPausa;
-    private bool juegoPausado = false;
 
     public void Pausar()
     {
-        juegoPausado = !juegoPausado;
+        GamePaused = !GamePaused;
 
-        if (juegoPausado)
+        if (GamePaused)
         {
             panelPausa.SetActive(true);
             Time.timeScale = 0f;
@@ -25,6 +26,6 @@ public class PausaJuego : MonoBehaviour
     public void VolverAlMenu()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene("menuInicial"); // Cambia el nombre de la escena si es distinto
+        SceneManager.LoadScene("menuInicial");
     }
 }

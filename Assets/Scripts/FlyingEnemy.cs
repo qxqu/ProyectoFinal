@@ -5,42 +5,45 @@ public class FlyingEnemy : MonoBehaviour
     [Header("Follow Settings")]
     public Transform player;
     public float speed = 2f;
-    public float followRange = 10f;
-    public float stopDistance = 1.5f;
+    public float followRange = 15f;
+    public float stopDistance = 0.1f; // Se acerca casi completamente
 
     private Animator animator;
     private Vector3 originalScale;
 
     void Start()
     {
-        // Guardar escala original
         originalScale = transform.localScale;
 
-        // Asegurar rigidbody correctamente configurado
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
         if (rb == null)
             rb = gameObject.AddComponent<Rigidbody2D>();
 
         rb.gravityScale = 0;
-        rb.freezeRotation = true;                    // NO gira
+        rb.freezeRotation = true;
         rb.bodyType = RigidbodyType2D.Kinematic;
-     
     }
 
     void Update()
     {
-        if (player == null) return;
+        if (player == null)
+            return;
 
         float distance = Vector2.Distance(transform.position, player.position);
 
-        if (distance < followRange && distance > stopDistance)
+        // Ahora SIEMPRE se acerca hasta casi tocar al jugador
+        if (distance < followRange)
         {
             Vector2 direction = (player.position - transform.position).normalized;
-            transform.position += (Vector3)direction * speed * Time.deltaTime;
+
+            if (distance > stopDistance)
+            {
+                transform.position += (Vector3)direction * speed * Time.deltaTime;
+            }
 
             animator?.SetBool("isFlying", true);
 
-            // Voltear solo la X manteniendo el tamaño original
+            // Voltear dependiendo de la dirección
             if (direction.x > 0)
                 transform.localScale = originalScale;
             else if (direction.x < 0)
@@ -52,14 +55,18 @@ public class FlyingEnemy : MonoBehaviour
         }
     }
 
-    // ESTA PARTE sigue igual (para daño al player)
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
             PlayerHealth health = collision.GetComponent<PlayerHealth>();
+
             if (health != null)
-                health.TakeDamage();
+            {
+                health.TakeDamage(1); // AHORA SÍ LE QUITA UN CORAZÓN
+            }
+
+            Destroy(gameObject); // El enemigo desaparece al golpear
         }
     }
 }
