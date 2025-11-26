@@ -1,21 +1,26 @@
 using UnityEngine;
 using TMPro;
+using System.Collections.Generic; // para Queue<T>
 
 public class RoundManager : MonoBehaviour
 {
     public static RoundManager Instance;
 
     [Header("Round Settings")]
-    public int enemiesPerRound = 10;       // Enemigos necesarios por ronda
-    public int totalRounds = 3;            // Cantidad de rondas del juego
+    public int enemiesPerRound = 10;       // Valor base usado si no hay cola
+    public int totalRounds = 3;
     public float difficultyIncreaseRate = 1.2f;
+
+    // 🔹 NUEVA ESTRUCTURA DE DATOS
+    private Queue<int> enemiesQueue = new Queue<int>(); 
 
     [Header("Current Round Info")]
     public int currentRound = 1;
     private int enemiesKilledThisRound = 0;
+    private int requiredEnemiesThisRound; // valor extraído de la cola
 
     [Header("UI")]
-    public TextMeshProUGUI roundText; 
+    public TextMeshProUGUI roundText;
     public TextMeshProUGUI killsText;
 
     [Header("Events")]
@@ -23,7 +28,7 @@ public class RoundManager : MonoBehaviour
     public float delayBetweenRounds = 3f;
 
     [Header("Panels")]
-    public GameObject victoryPanel;  // Panel final de victoria
+    public GameObject victoryPanel;
 
     private bool isRoundActive = true;
 
@@ -38,22 +43,36 @@ public class RoundManager : MonoBehaviour
         }
 
         if (victoryPanel != null)
-            victoryPanel.SetActive(false); // asegurarse que está oculto
+            victoryPanel.SetActive(false);
     }
 
     private void Start()
     {
+        BuildRoundQueue();
+
+        requiredEnemiesThisRound = enemiesQueue.Dequeue(); // SE USA LA COLA
         UpdateUI();
     }
 
-    // Llamado por Enemy cuando muere
+   
+    private void BuildRoundQueue()
+    {
+        
+        for (int i = 1; i <= totalRounds; i++)
+        {
+            int enemies = Mathf.RoundToInt(enemiesPerRound * Mathf.Pow(difficultyIncreaseRate, i - 1));
+            enemiesQueue.Enqueue(enemies);
+        }
+    }
+
+   
     public void OnEnemyKilled()
     {
         enemiesKilledThisRound++;
 
         UpdateUI();
 
-        if (enemiesKilledThisRound >= enemiesPerRound)
+        if (enemiesKilledThisRound >= requiredEnemiesThisRound)
         {
             CompleteRound();
         }
@@ -63,7 +82,6 @@ public class RoundManager : MonoBehaviour
     {
         Debug.Log($"Round {currentRound} completada.");
 
-        // Si ya es la última ronda → PREGUNTA
         if (currentRound >= totalRounds)
         {
             Debug.Log("Juego completado. Mostrando pregunta final...");
@@ -71,7 +89,6 @@ public class RoundManager : MonoBehaviour
             return;
         }
 
-        // Si NO es la última ronda → continuar normal
         if (pauseSpawningBetweenRounds)
         {
             isRoundActive = false;
@@ -88,9 +105,10 @@ public class RoundManager : MonoBehaviour
         enemiesKilledThisRound = 0;
         isRoundActive = true;
 
+        requiredEnemiesThisRound = enemiesQueue.Dequeue(); // SIGUIENTE VALOR DE LA COLA
+
         Debug.Log($"Iniciando ronda {currentRound}...");
 
-        // Aumentar dificultad
         if (EnemySpawnManager.Instance != null)
         {
             EnemySpawnManager.Instance.IncreaseDifficulty(difficultyIncreaseRate);
@@ -106,7 +124,7 @@ public class RoundManager : MonoBehaviour
             roundText.text = $"Round {currentRound}/{totalRounds}";
 
         if (killsText != null)
-            killsText.text = $"Kills: {enemiesKilledThisRound}/{enemiesPerRound}";
+            killsText.text = $"Kills: {enemiesKilledThisRound}/{requiredEnemiesThisRound}";
     }
 
     public bool IsRoundActive()
@@ -114,7 +132,6 @@ public class RoundManager : MonoBehaviour
         return isRoundActive;
     }
 
-    // Llamado desde QuestionManager SI RESPONDE BIEN
     public void ShowFinalVictory()
     {
         Debug.Log("Jugador ha ganado con éxito. Mostrando panel final...");
@@ -122,6 +139,6 @@ public class RoundManager : MonoBehaviour
         if (victoryPanel != null)
             victoryPanel.SetActive(true);
 
-        Time.timeScale = 0f; // Pausar el juego para mostrar victoria
+        Time.timeScale = 0f;
     }
 }

@@ -1,19 +1,19 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class EnemySpawnManager : MonoBehaviour
 {
     public static EnemySpawnManager Instance { get; private set; }
 
-    public GameObject enemyPrefab;    // Prefab del enemigo
-    public Transform[] spawnPoints;   // Array de tus 4 spawners
-    public float spawnInterval = 3f;  // Cada cuántos segundos aparece un enemigo
+    public GameObject enemyPrefab;            // Prefab del enemigo
+    public List<Transform> spawnPoints;       // Lista de spawners (tipo abstracto)
+    public float spawnInterval = 3f;
 
     private float currentSpawnInterval;
     private bool isSpawning = true;
 
     void Awake()
     {
-        // Singleton pattern
         if (Instance == null)
         {
             Instance = this;
@@ -35,17 +35,19 @@ public class EnemySpawnManager : MonoBehaviour
         if (!isSpawning)
             return;
 
-        if (spawnPoints.Length == 0 || enemyPrefab == null)
+        if (spawnPoints.Count == 0 || enemyPrefab == null)
         {
             Debug.LogWarning("Faltan spawners o prefab del enemigo.");
             return;
         }
 
-        int randomIndex = Random.Range(0, spawnPoints.Length);
+        // Spawner aleatorio 
+        int randomIndex = Random.Range(0, spawnPoints.Count);
         Transform chosenSpawner = spawnPoints[randomIndex];
 
         GameObject enemy = Instantiate(enemyPrefab, chosenSpawner.position, Quaternion.identity);
 
+        
         FlyingEnemy flyingEnemy = enemy.GetComponent<FlyingEnemy>();
         if (flyingEnemy != null && flyingEnemy.player == null)
         {

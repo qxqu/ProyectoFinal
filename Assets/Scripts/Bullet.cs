@@ -21,15 +21,15 @@ public class Bullet : MonoBehaviour
 
         if (collision.CompareTag("Enemy"))
         {
-            Destroy(collision.gameObject); 
+            Destroy(collision.gameObject); // Destruye enemigo
 
-            
+            // Notificar al RoundManager
             if (RoundManager.Instance != null)
             {
                 RoundManager.Instance.OnEnemyKilled();
             }
         }
 
-        Destroy(gameObject); 
+        Destroy(gameObject); // Destruye bala siempre
     }
 }

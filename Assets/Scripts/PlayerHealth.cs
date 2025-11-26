@@ -9,11 +9,11 @@ public class PlayerHealth : MonoBehaviour
     private int currentLives;
 
     [Header("UI Hearts")]
-    public Image[] heartImages;   
+    public Image[] heartImages;       // Asigna los corazones del Canvas
     public Sprite fullHeart;
     public Sprite emptyHeart;
 
-    private HeartNode head;          
+    private HeartNode head;           // Lista enlazada de corazones
 
     [Header("Invincibility")]
     public float invincibleTime = 1f;
@@ -26,6 +26,7 @@ public class PlayerHealth : MonoBehaviour
         UpdateHearts();
     }
 
+    // Construye la lista enlazada basada en el array del inspector
     private void BuildLinkedList()
     {
         HeartNode prev = null;
@@ -97,6 +98,7 @@ public class PlayerHealth : MonoBehaviour
     }
 }
 
+// Nodo de lista enlazada para manejar corazones
 public class HeartNode
 {
     public Image heartImage;

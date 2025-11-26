@@ -1,101 +1,117 @@
 using UnityEngine;
+using System.Collections.Generic; // estructura de datos
 
 public class SettingsController : MonoBehaviour
 {
+    [Header("Panels")]
     [SerializeField] private GameObject settingsPanel;
     [SerializeField] private GameObject skinsPanel;
     [SerializeField] private GameObject ayudaPanel;
 
+    // estructura de datos
+    private Stack<GameObject> panelHistory = new Stack<GameObject>(); 
     private bool isOpen = false;
 
     private void Start()
     {
+        
         if (settingsPanel == null)
-        {
             settingsPanel = GameObject.Find("SettingsPanel");
-            if (settingsPanel == null)
-                Debug.LogError("❌ SettingsPanel no está asignado en el Inspector y no se encontró en la escena.");
-        }
 
         if (skinsPanel == null)
-        {
             skinsPanel = GameObject.Find("PanelSkins");
-            if (skinsPanel == null)
-                Debug.LogWarning("⚠️ PanelSkins no está asignado en el Inspector ni encontrado en la escena.");
-        }
 
         if (ayudaPanel == null)
-        {
             ayudaPanel = GameObject.Find("AyudaPanel");
-            if (ayudaPanel == null)
-                Debug.LogWarning("⚠️ AyudaPanel no está asignado en el Inspector ni encontrado en la escena.");
-        }
 
+        
         if (settingsPanel != null) settingsPanel.SetActive(false);
         if (skinsPanel != null) skinsPanel.SetActive(false);
         if (ayudaPanel != null) ayudaPanel.SetActive(false);
     }
 
+    
     public void OpenSettings()
     {
         if (settingsPanel == null) return;
 
         settingsPanel.SetActive(true);
-        if (skinsPanel != null) skinsPanel.SetActive(false);
-        if (ayudaPanel != null) ayudaPanel.SetActive(false);
+        panelHistory.Clear(); 
 
         Time.timeScale = 0f;
         isOpen = true;
     }
 
+    
     public void CloseSettings()
     {
         if (settingsPanel == null) return;
 
         settingsPanel.SetActive(false);
-        Time.timeScale = 1f; 
+        Time.timeScale = 1f;
+        panelHistory.Clear();
         isOpen = false;
     }
 
-    public void ToggleSettings()
+   
+    private void OpenPanel(GameObject panelToOpen)
     {
-        if (isOpen)
-            CloseSettings();
+        if (panelToOpen == null) return;
+
+        
+        if (panelHistory.Count == 0)
+        {
+            
+            panelHistory.Push(settingsPanel);
+        }
         else
-            OpenSettings();
+        {
+            
+            panelHistory.Push(GetCurrentPanel());
+        }
+
+        
+        GetCurrentPanel()?.SetActive(false);
+
+       
+        panelToOpen.SetActive(true);
     }
 
+    
+    public void GoBack()
+    {
+        if (panelHistory.Count == 0)
+        {
+            CloseSettings(); 
+            return;
+        }
+
+        
+        GetCurrentPanel()?.SetActive(false);
+
+        
+        GameObject previous = panelHistory.Pop();
+        previous.SetActive(true);
+    }
+
+    
+    private GameObject GetCurrentPanel()
+    {
+        if (settingsPanel.activeSelf) return settingsPanel;
+        if (skinsPanel.activeSelf) return skinsPanel;
+        if (ayudaPanel.activeSelf) return ayudaPanel;
+
+        return null;
+    }
+
+    
     public void OpenSkins()
     {
-        if (skinsPanel == null) return;
-
-        settingsPanel.SetActive(false);
-        skinsPanel.SetActive(true);
-        if (ayudaPanel != null) ayudaPanel.SetActive(false);
-    }
-
-    public void CloseSkins()
-    {
-        if (skinsPanel == null) return;
-
-        skinsPanel.SetActive(false);
-        settingsPanel.SetActive(true);
+        OpenPanel(skinsPanel);
     }
 
     public void OpenAyuda()
     {
-        if (ayudaPanel == null) return;
-
-        settingsPanel.SetActive(false);
-        ayudaPanel.SetActive(true);
-        if (skinsPanel != null) skinsPanel.SetActive(false);
-    }
-
-    public void CloseAyuda()
-    {
-        if (ayudaPanel == null) return;
-
-        ayudaPanel.SetActive(false);
-        settingsPanel.SetActive(true);
+        OpenPanel(ayudaPanel);
     }
 }

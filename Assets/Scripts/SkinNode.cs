@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class SkinNode
 {
-    public RuntimeAnimatorController controller; 
+    public Sprite skin;
     public SkinNode next;
 
-    public SkinNode(RuntimeAnimatorController c)
+    public SkinNode(Sprite s)
     {
-        controller = c;
+        skin = s;
         next = null;
     }
 }

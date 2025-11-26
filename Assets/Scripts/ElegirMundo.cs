@@ -5,7 +5,7 @@ public class ElegirMundo : MonoBehaviour
 {
     public void JugarMundo()
     {
-        SceneManager.LoadScene("Mundo1"); 
+        SceneManager.LoadScene("Mundo1"); // o el nombre de tu escena de juego
     }
 
     public void VolverAlMenu()
