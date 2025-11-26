@@ -32,7 +32,6 @@ public class EnemySpawnManager : MonoBehaviour
 
     void SpawnEnemy()
     {
-        // No spawnear si está pausado
         if (!isSpawning)
             return;
 
@@ -42,14 +41,11 @@ public class EnemySpawnManager : MonoBehaviour
             return;
         }
 
-        // Escoge un spawner aleatorio
         int randomIndex = Random.Range(0, spawnPoints.Length);
         Transform chosenSpawner = spawnPoints[randomIndex];
 
-        // Instancia el enemigo en ese spawner
         GameObject enemy = Instantiate(enemyPrefab, chosenSpawner.position, Quaternion.identity);
 
-        // Asignar player reference si el enemigo lo necesita
         FlyingEnemy flyingEnemy = enemy.GetComponent<FlyingEnemy>();
         if (flyingEnemy != null && flyingEnemy.player == null)
         {
@@ -61,27 +57,22 @@ public class EnemySpawnManager : MonoBehaviour
         }
     }
 
-    // Pausar spawning entre rondas
     public void PauseSpawning()
     {
         isSpawning = false;
         Debug.Log("Enemy spawning paused");
     }
 
-    // Reanudar spawning
     public void ResumeSpawning()
     {
         isSpawning = true;
         Debug.Log("Enemy spawning resumed");
     }
 
-    // Aumentar dificultad (spawn más rápido)
     public void IncreaseDifficulty(float multiplier)
     {
-        // Reducir el intervalo de spawn (spawn más rápido)
         currentSpawnInterval = Mathf.Max(0.5f, currentSpawnInterval / multiplier);
 
-        // Reiniciar el InvokeRepeating con el nuevo intervalo
         CancelInvoke(nameof(SpawnEnemy));
         InvokeRepeating(nameof(SpawnEnemy), 0.5f, currentSpawnInterval);
 
