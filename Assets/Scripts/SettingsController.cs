@@ -2,15 +2,14 @@ using UnityEngine;
 
 public class SettingsController : MonoBehaviour
 {
-    [SerializeField] private GameObject settingsPanel; // Panel de Configuración
-    [SerializeField] private GameObject skinsPanel;    // Panel de Skins
-    [SerializeField] private GameObject ayudaPanel;    // Panel de Ayuda
+    [SerializeField] private GameObject settingsPanel;
+    [SerializeField] private GameObject skinsPanel;
+    [SerializeField] private GameObject ayudaPanel;
 
     private bool isOpen = false;
 
     private void Start()
     {
-        // Busca automáticamente si no están asignados
         if (settingsPanel == null)
         {
             settingsPanel = GameObject.Find("SettingsPanel");
@@ -32,13 +31,11 @@ public class SettingsController : MonoBehaviour
                 Debug.LogWarning("⚠️ AyudaPanel no está asignado en el Inspector ni encontrado en la escena.");
         }
 
-        // Todos empiezan ocultos
         if (settingsPanel != null) settingsPanel.SetActive(false);
         if (skinsPanel != null) skinsPanel.SetActive(false);
         if (ayudaPanel != null) ayudaPanel.SetActive(false);
     }
 
-    // 🔹 Abre el panel principal de Settings
     public void OpenSettings()
     {
         if (settingsPanel == null) return;
@@ -47,21 +44,19 @@ public class SettingsController : MonoBehaviour
         if (skinsPanel != null) skinsPanel.SetActive(false);
         if (ayudaPanel != null) ayudaPanel.SetActive(false);
 
-        Time.timeScale = 0f; // pausa el juego
+        Time.timeScale = 0f;
         isOpen = true;
     }
 
-    // 🔹 Cierra el panel de Settings
     public void CloseSettings()
     {
         if (settingsPanel == null) return;
 
         settingsPanel.SetActive(false);
-        Time.timeScale = 1f; // reanuda el juego
+        Time.timeScale = 1f; 
         isOpen = false;
     }
 
-    // 🔹 Alternar (si usas un mismo botón)
     public void ToggleSettings()
     {
         if (isOpen)
@@ -70,7 +65,6 @@ public class SettingsController : MonoBehaviour
             OpenSettings();
     }
 
-    // 🔹 Abre el panel de Skins desde Settings
     public void OpenSkins()
     {
         if (skinsPanel == null) return;
@@ -80,7 +74,6 @@ public class SettingsController : MonoBehaviour
         if (ayudaPanel != null) ayudaPanel.SetActive(false);
     }
 
-    // 🔹 Vuelve del panel Skins al panel Settings
     public void CloseSkins()
     {
         if (skinsPanel == null) return;
@@ -89,7 +82,6 @@ public class SettingsController : MonoBehaviour
         settingsPanel.SetActive(true);
     }
 
-    // 🔹 Abre el panel de Ayuda desde Settings
     public void OpenAyuda()
     {
         if (ayudaPanel == null) return;
@@ -99,7 +91,6 @@ public class SettingsController : MonoBehaviour
         if (skinsPanel != null) skinsPanel.SetActive(false);
     }
 
-    // 🔹 Cierra Ayuda y vuelve al panel de Settings
     public void CloseAyuda()
     {
         if (ayudaPanel == null) return;

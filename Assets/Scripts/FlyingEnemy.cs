@@ -22,7 +22,6 @@ public class FlyingEnemy : MonoBehaviour
         rb.freezeRotation = true;
         rb.bodyType = RigidbodyType2D.Kinematic;
 
-        // IMPORTANTE: evita que el collider frene al enemigo
         rb.collisionDetectionMode = CollisionDetectionMode2D.Discrete;
     }
 
@@ -34,7 +33,6 @@ public class FlyingEnemy : MonoBehaviour
 
         if (distance < followRange)
         {
-            // Movimiento preciso hasta tocar al jugador
             transform.position = Vector2.MoveTowards(
                 transform.position,
                 player.position,
@@ -43,7 +41,6 @@ public class FlyingEnemy : MonoBehaviour
 
             animator?.SetBool("isFlying", true);
 
-            // Voltear sprite
             if (player.position.x > transform.position.x)
                 transform.localScale = originalScale;
             else
@@ -64,7 +61,6 @@ public class FlyingEnemy : MonoBehaviour
             if (health != null)
                 health.TakeDamage();
 
-            // El enemigo desaparece al tocar
             Destroy(gameObject);
         }
     }

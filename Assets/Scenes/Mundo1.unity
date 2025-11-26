@@ -3075,6 +3075,7 @@ GameObject:
   - component: {fileID: 1509784382}
   - component: {fileID: 1509784381}
   - component: {fileID: 1509784384}
+  - component: {fileID: 1509784385}
   m_Layer: 8
   m_Name: 0
   m_TagString: Player
@@ -3292,6 +3293,25 @@ MonoBehaviour:
   walkSpeed: 3
   runSpeed: 4
   jumpForce: 6
+  isShooting: 0
+  shootTimer: 0
+--- !u!114 &1509784385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1509784375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 603b93747b19ea24093184b06de6d764, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SkinManager
+  skinControllers:
+  - {fileID: 9100000, guid: 31f483f978a021a45bd2bd9ded7b0dea, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  playerAnimator: {fileID: 0}
 --- !u!1 &1524665337
 GameObject:
   m_ObjectHideFlags: 0

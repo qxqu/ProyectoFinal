@@ -19,7 +19,7 @@ public class GameOverManager : MonoBehaviour
 
     public void ShowGameOver()
     {
-        Time.timeScale = 0f; // Congelar el juego
+        Time.timeScale = 0f;
         gameOverPanel.SetActive(true);
     }
 

@@ -12,7 +12,7 @@ public class PlayerAimAndShoot : MonoBehaviour
     private Collider2D playerCollider;
     private Animator anim;
 
-    private PlayerMovement movement; // <-- IMPORTANTE
+    private PlayerMovement movement; 
 
     void Start()
     {
@@ -20,14 +20,12 @@ public class PlayerAimAndShoot : MonoBehaviour
 
         playerCollider = GetComponent<Collider2D>();
         anim = GetComponent<Animator>();
-        movement = GetComponent<PlayerMovement>();  // <-- CONEXIÓN
+        movement = GetComponent<PlayerMovement>();
     }
 
     void Update()
     {
         FlipTowardsMouse();
-
-        // Disparo con clic derecho
         if (Input.GetMouseButtonDown(1))
         {
             Shoot();
@@ -52,28 +50,24 @@ public class PlayerAimAndShoot : MonoBehaviour
 
     void Shoot()
     {
-        // Activar animación
         anim.SetBool("Shoot", true);
         movement.isShooting = true;
 
         StartCoroutine(StopShootAnimation());
 
-        // Instanciar bala
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
 
-        // Ignorar colisión con jugador
         Collider2D bulletCol = bullet.GetComponent<Collider2D>();
         if (bulletCol != null && playerCollider != null)
             Physics2D.IgnoreCollision(bulletCol, playerCollider);
 
-        // Aplicar velocidad
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
         rb.linearVelocity = firePoint.right * bulletSpeed;
     }
 
     private IEnumerator StopShootAnimation()
     {
-        yield return new WaitForSeconds(0.15f); // Ajusta al largo de tu animación
+        yield return new WaitForSeconds(0.15f);
         anim.SetBool("Shoot", false);
         movement.isShooting = false;
     }
