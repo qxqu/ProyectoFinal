@@ -1,28 +1,33 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class PlayerHealth : MonoBehaviour
 {
+    [Header("Lives")]
     public int maxLives = 3;
     private int currentLives;
 
-    public Image[] heartImages;
+    [Header("UI Hearts")]
+    public Image[] heartImages;       // Asigna los corazones del Canvas
     public Sprite fullHeart;
     public Sprite emptyHeart;
 
-    private HeartNode head;
-    private bool isInvincible = false;
-    public float invincibleTime = 1f;
+    private HeartNode head;           // Lista enlazada de corazones
 
-    void Start()
+    [Header("Invincibility")]
+    public float invincibleTime = 1f;
+    private bool isInvincible = false;
+
+    private void Start()
     {
         currentLives = maxLives;
         BuildLinkedList();
         UpdateHearts();
     }
 
-    // Construye la lista enlazada
-    void BuildLinkedList()
+    // Construye la lista enlazada basada en el array del inspector
+    private void BuildLinkedList()
     {
         HeartNode prev = null;
 
@@ -39,31 +44,43 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
-    // 👉 MÉTODO ORIGINAL (sin parámetros)
     public void TakeDamage()
-    {
-        TakeDamage(1); // Llama al nuevo método
-    }
-
-    // 👉 MÉTODO NUEVO (con parámetros)
-    public void TakeDamage(int amount)
     {
         if (isInvincible)
             return;
 
-        currentLives -= amount;
+        currentLives--;
 
         if (currentLives <= 0)
         {
-            Debug.Log("El jugador murió");
-            // Aquí puedes reiniciar la escena o abrir menú Game Over
+            currentLives = 0;
+            UpdateHearts();
+            Die();
+            return;
         }
 
         UpdateHearts();
         StartCoroutine(Invincibility());
     }
 
-    void UpdateHearts()
+    private IEnumerator Invincibility()
+    {
+        isInvincible = true;
+        yield return new WaitForSeconds(invincibleTime);
+        isInvincible = false;
+    }
+
+    private void Die()
+    {
+        Debug.Log("El jugador murió");
+
+        if (GameOverManager.Instance != null)
+            GameOverManager.Instance.ShowGameOver();
+        else
+            Debug.LogError("NO HAY GameOverManager en la escena.");
+    }
+
+    private void UpdateHearts()
     {
         HeartNode current = head;
         int index = 0;
@@ -79,16 +96,9 @@ public class PlayerHealth : MonoBehaviour
             index++;
         }
     }
-
-    private System.Collections.IEnumerator Invincibility()
-    {
-        isInvincible = true;
-        yield return new WaitForSeconds(invincibleTime);
-        isInvincible = false;
-    }
 }
 
-// Nodo
+// Nodo de lista enlazada para manejar corazones
 public class HeartNode
 {
     public Image heartImage;

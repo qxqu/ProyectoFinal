@@ -15,74 +15,81 @@ public class RoundManager : MonoBehaviour
     private int enemiesKilledThisRound = 0;
     private int totalEnemiesKilled = 0;
 
-    [Header("UI (TextMeshPro)")]
-    public TMP_Text roundText;      // Ej: "Round 1/3"
-    public TMP_Text killsText;      // Ej: "Kills: 0/10"
+    [Header("UI References (TMP)")]
+    public TMP_Text roundText;
+    public TMP_Text killsText;
 
     [Header("Round Events")]
     public bool pauseSpawningBetweenRounds = true;
-    public float delayBetweenRounds = 3f;
+    public float delayBetweenRounds = 2f;
 
     private bool isRoundActive = true;
 
-    void Awake()
+    private void Awake()
     {
         if (Instance == null)
-        {
             Instance = this;
-        }
         else
-        {
             Destroy(gameObject);
-            return;
-        }
     }
 
-    void Start()
+    private void Start()
     {
         UpdateUI();
     }
 
-    // Llamado cuando un enemigo muere
+    // Llamado desde Bullet.cs cuando un enemigo muere
     public void OnEnemyKilled()
     {
         enemiesKilledThisRound++;
         totalEnemiesKilled++;
 
-        Debug.Log($"Enemy killed! {enemiesKilledThisRound}/{enemiesPerRound}");
-
         UpdateUI();
 
-        // Si la ronda está completa
+        // ¿Terminó la ronda?
         if (enemiesKilledThisRound >= enemiesPerRound)
         {
             CompleteRound();
         }
     }
 
-    void CompleteRound()
+    private void CompleteRound()
     {
-        Debug.Log($"Round {currentRound} completed!");
+        Debug.Log($"Round {currentRound} completado!");
 
-        if (pauseSpawningBetweenRounds)
-        {
-            isRoundActive = false;
+        // Pausar el spawn
+        if (pauseSpawningBetweenRounds && EnemySpawnManager.Instance != null)
+            EnemySpawnManager.Instance.PauseSpawning();
 
-            if (EnemySpawnManager.Instance != null)
-                EnemySpawnManager.Instance.PauseSpawning();
-        }
+        isRoundActive = false;
 
+        // Pasar a la siguiente ronda luego de un delay
         Invoke(nameof(StartNextRound), delayBetweenRounds);
     }
 
-    void StartNextRound()
+    private void StartNextRound()
     {
         currentRound++;
+
+        // ❗ Si ya pasamos la última ronda → victoria
+        if (currentRound > maxRounds)
+        {
+            Debug.Log("El jugador ganó el juego.");
+
+            if (VictoryManager.Instance != null)
+                VictoryManager.Instance.ShowVictory();
+            else
+                Debug.LogError("VictoryManager no está en la escena.");
+
+            return;
+        }
+
+        Debug.Log($"Iniciando Round {currentRound}");
+
         enemiesKilledThisRound = 0;
         isRoundActive = true;
 
-        Debug.Log($"Starting Round {currentRound}!");
-
+        // Aumentar dificultad del spawner
         if (EnemySpawnManager.Instance != null)
         {
             EnemySpawnManager.Instance.IncreaseDifficulty(difficultyIncreaseRate);
@@ -92,7 +99,7 @@ public class RoundManager : MonoBehaviour
         UpdateUI();
     }
 
-    void UpdateUI()
+    private void UpdateUI()
     {
         if (roundText != null)
             roundText.text = $"Round {currentRound}/{maxRounds}";

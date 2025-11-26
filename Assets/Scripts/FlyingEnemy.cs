@@ -6,7 +6,6 @@ public class FlyingEnemy : MonoBehaviour
     public Transform player;
     public float speed = 2f;
     public float followRange = 15f;
-    public float stopDistance = 0.1f; // Se acerca casi completamente
 
     private Animator animator;
     private Vector3 originalScale;
@@ -22,31 +21,32 @@ public class FlyingEnemy : MonoBehaviour
         rb.gravityScale = 0;
         rb.freezeRotation = true;
         rb.bodyType = RigidbodyType2D.Kinematic;
+
+        // IMPORTANTE: evita que el collider frene al enemigo
+        rb.collisionDetectionMode = CollisionDetectionMode2D.Discrete;
     }
 
     void Update()
     {
-        if (player == null)
-            return;
+        if (player == null) return;
 
         float distance = Vector2.Distance(transform.position, player.position);
 
-        // Ahora SIEMPRE se acerca hasta casi tocar al jugador
         if (distance < followRange)
         {
-            Vector2 direction = (player.position - transform.position).normalized;
-
-            if (distance > stopDistance)
-            {
-                transform.position += (Vector3)direction * speed * Time.deltaTime;
-            }
+            // Movimiento preciso hasta tocar al jugador
+            transform.position = Vector2.MoveTowards(
+                transform.position,
+                player.position,
+                speed * Time.deltaTime
+            );
 
             animator?.SetBool("isFlying", true);
 
-            // Voltear dependiendo de la dirección
-            if (direction.x > 0)
+            // Voltear sprite
+            if (player.position.x > transform.position.x)
                 transform.localScale = originalScale;
-            else if (direction.x < 0)
+            else
                 transform.localScale = new Vector3(-originalScale.x, originalScale.y, originalScale.z);
         }
         else
@@ -62,11 +62,10 @@ public class FlyingEnemy : MonoBehaviour
             PlayerHealth health = collision.GetComponent<PlayerHealth>();
 
             if (health != null)
-            {
-                health.TakeDamage(1); // AHORA SÍ LE QUITA UN CORAZÓN
-            }
+                health.TakeDamage();
 
-            Destroy(gameObject); // El enemigo desaparece al golpear
+            // El enemigo desaparece al tocar
+            Destroy(gameObject);
         }
     }
 }
