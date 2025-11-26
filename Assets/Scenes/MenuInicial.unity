@@ -685,7 +685,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "En el juego deber\xE1s vencer a oleadas de enemigos (viruses) que te perseguir\xE1n.
-    Tu deber es sobrevivir y acabar con ellos. Tras ganar una ronda, se presentara
+    Tu deber es sobrevivir y acabar con ellos. Tras completar las 3 rondas, se presentara
     una pregunta sobre ciberseguridad la cual debes responder correctamente o tendr\xE1s
     que empezar de cero.\n\n====Movimiento====\n\nW \u2192 Saltar\n\nA \u2192 Moverse
     a la izquierda\n\nD \u2192 Moverse a la derecha\n\nS \u2192 (Opcional) Descender
@@ -3767,7 +3767,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1483577539}
         m_TargetAssemblyTypeName: menuproyecto1, Assembly-CSharp
-        m_MethodName: StartGame
+        m_MethodName: StartGame1
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

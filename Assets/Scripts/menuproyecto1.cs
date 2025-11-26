@@ -10,6 +10,13 @@ public class menuproyecto1 : MonoBehaviour
         SceneManager.LoadScene("ElegirMundo");
     }
 
+    public void StartGame1()
+    {
+        // Carga la escena llamada "SampleScene"
+        SceneManager.LoadScene("Historia");
+    }
+
+
     // Si quieres, puedes agregar más funciones para los otros botones:
     public void ExitGame()
     {

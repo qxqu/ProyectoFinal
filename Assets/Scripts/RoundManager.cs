@@ -3,25 +3,27 @@ using TMPro;
 
 public class RoundManager : MonoBehaviour
 {
-    public static RoundManager Instance { get; private set; }
+    public static RoundManager Instance;
 
     [Header("Round Settings")]
-    public int enemiesPerRound = 10;
+    public int enemiesPerRound = 10;       // Enemigos necesarios por ronda
+    public int totalRounds = 3;            // Cantidad de rondas del juego
     public float difficultyIncreaseRate = 1.2f;
-    public int maxRounds = 3;
 
     [Header("Current Round Info")]
     public int currentRound = 1;
     private int enemiesKilledThisRound = 0;
-    private int totalEnemiesKilled = 0;
 
-    [Header("UI References (TMP)")]
-    public TMP_Text roundText;
-    public TMP_Text killsText;
+    [Header("UI")]
+    public TextMeshProUGUI roundText; 
+    public TextMeshProUGUI killsText;
 
-    [Header("Round Events")]
+    [Header("Events")]
     public bool pauseSpawningBetweenRounds = true;
-    public float delayBetweenRounds = 2f;
+    public float delayBetweenRounds = 3f;
+
+    [Header("Panels")]
+    public GameObject victoryPanel;  // Panel final de victoria
 
     private bool isRoundActive = true;
 
@@ -30,7 +32,13 @@ public class RoundManager : MonoBehaviour
         if (Instance == null)
             Instance = this;
         else
+        {
             Destroy(gameObject);
+            return;
+        }
+
+        if (victoryPanel != null)
+            victoryPanel.SetActive(false); // asegurarse que está oculto
     }
 
     private void Start()
@@ -38,15 +46,13 @@ public class RoundManager : MonoBehaviour
         UpdateUI();
     }
 
-    // Llamado desde Bullet.cs cuando un enemigo muere
+    // Llamado por Enemy cuando muere
     public void OnEnemyKilled()
     {
         enemiesKilledThisRound++;
-        totalEnemiesKilled++;
 
         UpdateUI();
 
-        // ¿Terminó la ronda?
         if (enemiesKilledThisRound >= enemiesPerRound)
         {
             CompleteRound();
@@ -55,41 +61,36 @@ public class RoundManager : MonoBehaviour
 
     private void CompleteRound()
     {
-        Debug.Log($"Round {currentRound} completado!");
+        Debug.Log($"Round {currentRound} completada.");
 
-        // Pausar el spawn
-        if (pauseSpawningBetweenRounds && EnemySpawnManager.Instance != null)
-            EnemySpawnManager.Instance.PauseSpawning();
+        // Si ya es la última ronda → PREGUNTA
+        if (currentRound >= totalRounds)
+        {
+            Debug.Log("Juego completado. Mostrando pregunta final...");
+            QuestionManager.Instance.ShowRandomQuestion();
+            return;
+        }
 
-        isRoundActive = false;
+        // Si NO es la última ronda → continuar normal
+        if (pauseSpawningBetweenRounds)
+        {
+            isRoundActive = false;
+            if (EnemySpawnManager.Instance != null)
+                EnemySpawnManager.Instance.PauseSpawning();
+        }
 
-        // Pasar a la siguiente ronda luego de un delay
         Invoke(nameof(StartNextRound), delayBetweenRounds);
     }
 
     private void StartNextRound()
     {
         currentRound++;
-
-        // ❗ Si ya pasamos la última ronda → victoria
-        if (currentRound > maxRounds)
-        {
-            Debug.Log("El jugador ganó el juego.");
-
-            if (VictoryManager.Instance != null)
-                VictoryManager.Instance.ShowVictory();
-            else
-                Debug.LogError("VictoryManager no está en la escena.");
-
-            return;
-        }
-
-        Debug.Log($"Iniciando Round {currentRound}");
-
         enemiesKilledThisRound = 0;
         isRoundActive = true;
 
-        // Aumentar dificultad del spawner
+        Debug.Log($"Iniciando ronda {currentRound}...");
+
+        // Aumentar dificultad
         if (EnemySpawnManager.Instance != null)
         {
             EnemySpawnManager.Instance.IncreaseDifficulty(difficultyIncreaseRate);
@@ -102,7 +103,7 @@ public class RoundManager : MonoBehaviour
     private void UpdateUI()
     {
         if (roundText != null)
-            roundText.text = $"Round {currentRound}/{maxRounds}";
+            roundText.text = $"Round {currentRound}/{totalRounds}";
 
         if (killsText != null)
             killsText.text = $"Kills: {enemiesKilledThisRound}/{enemiesPerRound}";
@@ -113,13 +114,14 @@ public class RoundManager : MonoBehaviour
         return isRoundActive;
     }
 
-    public int GetEnemiesRemainingInRound()
+    // Llamado desde QuestionManager SI RESPONDE BIEN
+    public void ShowFinalVictory()
     {
-        return enemiesPerRound - enemiesKilledThisRound;
-    }
+        Debug.Log("Jugador ha ganado con éxito. Mostrando panel final...");
 
-    public int GetTotalKills()
-    {
-        return totalEnemiesKilled;
+        if (victoryPanel != null)
+            victoryPanel.SetActive(true);
+
+        Time.timeScale = 0f; // Pausar el juego para mostrar victoria
     }
 }
