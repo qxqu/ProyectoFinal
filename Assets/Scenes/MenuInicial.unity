@@ -629,7 +629,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SkinSelector
   skinButtons: []
   normalColor: {r: 0, g: 0, b: 1, a: 1}
-  selectedColor1: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor1: {r: 0.21960786, g: 0.21960786, b: 0.21960786, a: 1}
   selectedColor2: {r: 1, g: 0.6470588, b: 0, a: 1}
 --- !u!1 &430323236
 GameObject:
@@ -1707,7 +1707,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 957524056}
         m_TargetAssemblyTypeName: SettingsController, Assembly-CSharp
-        m_MethodName: CloseSkins
+        m_MethodName: GoBack
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2472,8 +2472,8 @@ Transform:
   m_GameObject: {fileID: 1348191171}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.11413574, y: 1.039978, z: 0}
-  m_LocalScale: {x: 0.25763294, y: 0.24374971, z: 1}
+  m_LocalPosition: {x: 0.1254, y: 1.3751, z: 0}
+  m_LocalScale: {x: 0.256757, y: 0.23750971, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 205917292}
@@ -2525,7 +2525,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 6
-  m_Sprite: {fileID: 5088316998373936774, guid: ece03b089cca595498053c57b979ba7b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9fe4c939387124340b883ebd9bc0f898, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -4175,7 +4175,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 957524056}
         m_TargetAssemblyTypeName: SettingsController, Assembly-CSharp
-        m_MethodName: CloseAyuda
+        m_MethodName: GoBack
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

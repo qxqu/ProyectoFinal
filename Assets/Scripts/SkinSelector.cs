@@ -8,7 +8,7 @@ public class SkinSelector : MonoBehaviour
     public static int savedSkinIndex = 0;
     public Image[] skinButtons;
     public Color normalColor = Color.blue;
-    public Color selectedColor1 = Color.white;
+    public Color selectedColor1 = Color.black;
     public Color selectedColor2 = Color.orange;
     private void Start()
 

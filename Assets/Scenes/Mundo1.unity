@@ -4025,8 +4025,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SkinManager
   skinControllers:
   - {fileID: 9100000, guid: 31f483f978a021a45bd2bd9ded7b0dea, type: 2}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 22100000, guid: 9d5c33377cbbe6340ada65a818e2dd8a, type: 2}
+  - {fileID: 22100000, guid: 040cdfc5b44bf79448aec065ad807eda, type: 2}
   playerAnimator: {fileID: 0}
 --- !u!1 &1524665337
 GameObject:
