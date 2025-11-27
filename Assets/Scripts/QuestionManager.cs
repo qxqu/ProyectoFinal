@@ -16,7 +16,7 @@ public class QuestionManager : MonoBehaviour
     public class Question
     {
         public string text;
-        public bool answer; // true = verdadero, false = falso
+        public bool answer;
     }
 
     [Header("Preguntas de Ciberseguridad")]
@@ -40,7 +40,7 @@ public class QuestionManager : MonoBehaviour
         questionText.text = currentQuestion.text;
         questionPanel.SetActive(true);
 
-        Time.timeScale = 0f; // Pausar el juego mientras responde
+        Time.timeScale = 0f; 
     }
 
     public void AnswerTrue()
@@ -61,7 +61,7 @@ public class QuestionManager : MonoBehaviour
         if (playerAnswer == currentQuestion.answer)
         {
             Debug.Log("✔ Respuesta correcta!");
-            RoundManager.Instance.ShowFinalVictory(); // ← MOSTRAR PANEL DE VICTORIA
+            RoundManager.Instance.ShowFinalVictory(); 
         }
         else
         {

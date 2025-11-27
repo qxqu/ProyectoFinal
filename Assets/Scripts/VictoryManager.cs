@@ -24,11 +24,10 @@ public class VictoryManager : MonoBehaviour
         if (victoryPanel != null)
         {
             victoryPanel.SetActive(true);
-            Time.timeScale = 0f;  // Pausa el juego
+            Time.timeScale = 0f; 
         }
     }
 
-    // Botón de volver al menú
     public void ReturnToMenu()
     {
         Time.timeScale = 1f;

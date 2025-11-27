@@ -450,8 +450,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 3.63, y: 1.02}
-  m_SizeDelta: {x: 3.4368, y: 2.8562}
+  m_AnchoredPosition: {x: -0.1505, y: 0.9379}
+  m_SizeDelta: {x: 3.1358, y: 2.692}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &270230861
 MonoBehaviour:
@@ -497,7 +497,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 384167862}
         m_TargetAssemblyTypeName: SkinSelector, Assembly-CSharp
         m_MethodName: SelectSkin
         m_Mode: 3
@@ -627,6 +627,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df9ad0ec07bcc584e8b55ed35d1f8fdc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SkinSelector
+  skinButtons: []
+  normalColor: {r: 0, g: 0, b: 1, a: 1}
+  selectedColor1: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor2: {r: 1, g: 0.6470588, b: 0, a: 1}
 --- !u!1 &430323236
 GameObject:
   m_ObjectHideFlags: 0
@@ -688,10 +692,9 @@ MonoBehaviour:
     Tu deber es sobrevivir y acabar con ellos. Tras completar las 3 rondas, se presentara
     una pregunta sobre ciberseguridad la cual debes responder correctamente o tendr\xE1s
     que empezar de cero.\n\n====Movimiento====\n\nW \u2192 Saltar\n\nA \u2192 Moverse
-    a la izquierda\n\nD \u2192 Moverse a la derecha\n\nS \u2192 (Opcional) Descender
-    o acci\xF3n secundaria seg\xFAn nivel\n\n====Disparo====\n\nClick Derecho del
-    Mouse \u2192 Disparar\nApunta con el mouse y dispara hacia la direcci\xF3n en
-    que est\xE9s mirando.\n\n\n"
+    a la izquierda\n\nD \u2192 Moverse a la derecha\n\n====Disparo====\n\nClick Derecho
+    del Mouse \u2192 Disparar\nApunta con el mouse y dispara hacia la direcci\xF3n
+    en que est\xE9s mirando.\n\n\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1010,7 +1013,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 384167862}
         m_TargetAssemblyTypeName: SkinSelector, Assembly-CSharp
         m_MethodName: SelectSkin
         m_Mode: 3
@@ -3495,8 +3498,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.12, y: 1.02}
-  m_SizeDelta: {x: 3.4368, y: 2.8562}
+  m_AnchoredPosition: {x: 3.5788, y: 1.02}
+  m_SizeDelta: {x: 2.9716, y: 2.692}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1778431244
 MonoBehaviour:
@@ -3542,7 +3545,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 384167862}
         m_TargetAssemblyTypeName: SkinSelector, Assembly-CSharp
         m_MethodName: SelectSkin
         m_Mode: 3
