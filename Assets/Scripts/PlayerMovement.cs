@@ -15,7 +15,6 @@ public class PlayerMovement : MonoBehaviour
     private bool isGrounded = true;
     private Vector2 moveInput;
 
-    // --- Disparo ---
     [HideInInspector] public bool isShooting = false;
     [HideInInspector] public float shootTimer = 0f;
     private float shootCooldown = 0.25f;
@@ -29,7 +28,9 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        // --- CONTROLAR TIEMPO DE DISPARO ---
+        // ---------------------------------------------------
+        // CONTROL DE DISPARO (lo pone el PlayerAimAndShoot)
+        // ---------------------------------------------------
         if (isShooting)
         {
             shootTimer -= Time.deltaTime;
@@ -40,31 +41,39 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        // --- Movimiento horizontal ---
-        moveInput.x = Input.GetAxisRaw("Horizontal");
+        // ---------------------------------------------------
+        // MOVIMIENTO — Left Stick (PS4)
+        // ---------------------------------------------------
+        // "Horizontal" ya funciona con joystick izquierdo
+        moveInput.x = Input.GetAxis("Horizontal");
         bool isMoving = Mathf.Abs(moveInput.x) > 0.1f;
 
-        // --- Correr con Shift ---
-        bool isPressingShift = Input.GetKey(KeyCode.LeftShift);
+        // Run si mantienes L3 presionado (círculo del stick)
+        bool isPressingShift = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.JoystickButton8);
         float currentSpeed = isPressingShift ? runSpeed : walkSpeed;
 
         rb.linearVelocity = new Vector2(moveInput.x * currentSpeed, rb.linearVelocity.y);
 
-        // --- Saltar ---
-        if (Input.GetKeyDown(KeyCode.W) && isGrounded)
+        // ---------------------------------------------------
+        // SALTO — botón X del control PS4
+        // ---------------------------------------------------
+        // "Jump" debe estar configurado con JoystickButton1 (X)
+        if ((Input.GetButtonDown("Jump") || Input.GetKeyDown(KeyCode.JoystickButton1)) && isGrounded)
         {
             rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             isGrounded = false;
             anim.SetTrigger("Jumping");
         }
 
-        // --- Animación de caminar/correr (solo si NO está disparando) ---
+        // ---------------------------------------------------
+        // ANIMACIONES
+        // ---------------------------------------------------
         if (!isShooting)
-        {
             anim.SetBool("isRunning", isMoving);
-        }
 
-        // --- Rotar sprite según dirección ---
+        // ---------------------------------------------------
+        // FLIP SPRITE
+        // ---------------------------------------------------
         if (moveInput.x != 0)
             sr.flipX = moveInput.x < 0;
     }

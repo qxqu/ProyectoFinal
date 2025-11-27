@@ -4,13 +4,12 @@ using TMPro;
 
 public class CuentaRegresiva : MonoBehaviour
 {
-    public GameObject panelCuenta;        // Panel que contiene el texto
-    public TextMeshProUGUI textoCuenta;   // Texto de la cuenta regresiva
-    public float tiempoEntreNumeros = 1f; // Tiempo entre cada número
+    public GameObject panelCuenta;       
+    public TextMeshProUGUI textoCuenta; 
+    public float tiempoEntreNumeros = 1f; 
 
     private void Start()
     {
-        // Pausa el juego mientras hace la cuenta
         Time.timeScale = 0f;
         StartCoroutine(IniciarCuenta());
     }
@@ -18,7 +17,7 @@ public class CuentaRegresiva : MonoBehaviour
     IEnumerator IniciarCuenta()
     {
         int contador = 3;
-        textoCuenta.color = Color.white; // color fijo
+        textoCuenta.color = Color.white; 
 
         while (contador > 0)
         {
@@ -30,7 +29,6 @@ public class CuentaRegresiva : MonoBehaviour
         textoCuenta.text = "¡GO!";
         yield return new WaitForSecondsRealtime(0.7f);
 
-        // Quita el panel y reanuda el juego
         panelCuenta.SetActive(false);
         Time.timeScale = 1f;
     }

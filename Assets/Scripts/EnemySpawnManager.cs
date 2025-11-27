@@ -5,8 +5,8 @@ public class EnemySpawnManager : MonoBehaviour
 {
     public static EnemySpawnManager Instance { get; private set; }
 
-    public GameObject enemyPrefab;            // Prefab del enemigo
-    public List<Transform> spawnPoints;       // Lista de spawners (tipo abstracto)
+    public GameObject enemyPrefab;           
+    public List<Transform> spawnPoints;     
     public float spawnInterval = 3f;
 
     private float currentSpawnInterval;
@@ -41,7 +41,6 @@ public class EnemySpawnManager : MonoBehaviour
             return;
         }
 
-        // Spawner aleatorio 
         int randomIndex = Random.Range(0, spawnPoints.Count);
         Transform chosenSpawner = spawnPoints[randomIndex];
 

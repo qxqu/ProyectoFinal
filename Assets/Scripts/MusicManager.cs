@@ -28,7 +28,6 @@ public class MusicManager : MonoBehaviour
         if (musicSource == null)
             musicSource = GetComponent<AudioSource>();
 
-        // Recupera el volumen guardado
         float savedVolume = PlayerPrefs.GetFloat("MusicVolume", 0.5f);
         musicSource.volume = savedVolume;
 
@@ -42,7 +41,7 @@ public class MusicManager : MonoBehaviour
     private void ChangeVolume(float value)
     {
         musicSource.volume = value;
-        PlayerPrefs.SetFloat("MusicVolume", value); // Guarda el volumen global
+        PlayerPrefs.SetFloat("MusicVolume", value); 
     }
 
     public void RegisterSlider(Slider newSlider)
